@@ -22,7 +22,6 @@ def add_hyperlink(paragraph, url, text):
     :param text: The text displayed for the url
     :return: The hyperlink object
     """
-
     # This gets access to the document.xml.rels file and gets a new relation id value
     part = paragraph.part
     r_id = part.relate_to(
