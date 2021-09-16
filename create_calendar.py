@@ -7,9 +7,7 @@ from docx.enum.text import WD_ALIGN_PARAGRAPH
 class calendarEvent(object):
     def __init__(self, start_time, subject, body):
         start_time = str(start_time)
-        # print(start_time)
         self.start_time = start_time[:16]
-        # print(self.start_time)
         self.subject = subject
         self.body = body
         self.sanitize_body()
