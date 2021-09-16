@@ -6,6 +6,10 @@ from docx.enum.text import WD_ALIGN_PARAGRAPH
 
 class calendarEvent(object):
     def __init__(self, start_time, subject, body):
+        """The start time of the calendar event is converted to a string, then
+        it is stripped of all extraneous time information (seconds, timezone,
+        etc.). The body is 'sanitized' by removing all the webex information
+        using symbols that appear right before the webex information starts."""
         start_time = str(start_time)
         self.start_time = start_time[:16]
         self.subject = subject
@@ -28,14 +32,9 @@ def getCalendarEntries(room, days=1):
     """
     Outlook = win32com.client.Dispatch("Outlook.Application")
     ns = Outlook.GetNamespace("MAPI")
-    # turn this into a list to read more calendars
     recipient = ns.CreateRecipient(room)  # cmd whoami to find this
     resolved = recipient.Resolve()  # checks for username in address book
-    # olFolderCalendar = 9
-    # appointments = ns.GetDefaultFolder(9).Items  # for personal calendar
     appointments = ns.GetSharedDefaultFolder(recipient, 9).Items
-    # appointments = ns.GetDefaultFolder(9).Items
-    print(appointments)
     appointments.Sort("[Start]")
     appointments.IncludeRecurrences = "True"
     today = datetime.datetime.today()
@@ -45,7 +44,6 @@ def getCalendarEntries(room, days=1):
     appointments = appointments.Restrict(
         "[Start] >= '" + begin + "' AND [END] <= '" + end + "'"
     )
-    # events={'Start':[],'Subject':[],'Duration':[], 'Body':[]}
     events = []
     for a in appointments:
         new_event = calendarEvent(a.Start, a.Subject, a.Body)
@@ -85,7 +83,6 @@ def create_daily_calendar(courtroom):
             time = paragraph.add_run(event.start_time[10:] + " \n")
             time.bold = True
             paragraph.add_run(event.subject + " " + event.body + "\n")
-    # mydoc.save("C:\\users\\jkudela\\Desktop\\" + courtroom + ".docx")
     today = datetime.datetime.today()
     begin = today.date().strftime("%m-%d-%Y")
     mydoc.save("J:\\Courtroom_Calendars\\" + courtroom + "_" + begin + ".docx")

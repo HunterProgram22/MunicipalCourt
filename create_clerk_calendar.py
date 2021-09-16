@@ -6,10 +6,12 @@ from docx.enum.text import WD_ALIGN_PARAGRAPH
 
 class calendarEvent(object):
     def __init__(self, start_time, subject, body):
+        """The start time of the calendar event is converted to a string, then
+        it is stripped of all extraneous time information (seconds, timezone,
+        etc.). The body is 'sanitized' by removing all the webex information
+        using symbols that appear right before the webex information starts."""
         start_time = str(start_time)
-        # print(start_time)
         self.start_time = start_time[:16]
-        # print(self.start_time)
         self.subject = subject
         self.body = body
         self.sanitize_body()
@@ -84,7 +86,6 @@ def create_daily_calendar(courtroom):
             time = paragraph.add_run(event.start_time[10:] + " \n")
             time.bold = True
             paragraph.add_run(event.subject + " " + event.body + "\n")
-    # mydoc.save("C:\\users\\jkudela\\Desktop\\" + courtroom + ".docx")
     today = datetime.datetime.today() + datetime.timedelta(1)
     begin = today.date().strftime("%m-%d-%Y")
     mydoc.save("J:\\Courtroom_Calendars\\" + courtroom + "_clerk_" + begin + ".docx")
