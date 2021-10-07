@@ -49,7 +49,7 @@ def add_hyperlink(paragraph, url, text):
 
 
 VIDEO_PATH = "V:\\COURTROOM VIDEO PROCEEDINGS - JULY 2021 TO PRESENT\\"
-BEARER_TOKEN = "MGJkY2FlNjAtNDBiZS00YjY3LWFhNWUtYjM1ZWQ1MTVkOTNhYmE3MGY2OGMtYTQw_PF84_6b8180ed-7e73-4208-90f5-b67a07de84ac"
+BEARER_TOKEN = "YzY2NGMyODEtNGFhOS00NmU5LTgwZjItM2YyYWJhNDliMjI3MWU0ZDFjYjYtNDli_PF84_6b8180ed-7e73-4208-90f5-b67a07de84ac"
 
 
 @logger.catch
@@ -65,7 +65,7 @@ def main():
             + " - download does not include the last day:"
         )
     )
-    URL_string = (
+    URL_string_delaware = (
         "https://webexapis.com/v1/recordings?max=100&from="
         + "{from_date}&to={to_date}&siteUrl={site_url}&hostEmail={email}".format(
             max_records="100",  # There is something up with max_records in the format
@@ -75,20 +75,41 @@ def main():
             email="jkudela@municipalcourt.org",
         )
     )
-    logger.info(URL_string)
+
+    URL_string_municipal = (
+        "https://webexapis.com/v1/recordings?max=100&from="
+        + "{from_date}&to={to_date}&siteUrl={site_url}&hostEmail={email}".format(
+            max_records="100",  # There is something up with max_records in the format
+            from_date=start_date,
+            to_date=end_date,
+            site_url="municipalcourt.webex.com",
+            email="jkudela@municipalcourt.org",
+        )
+    )
+    # logger.info(URL_string)
+
     location = "Delaware City Webex"
     headers = {
         "Authorization": "Bearer {bearer_token}".format(bearer_token=BEARER_TOKEN)
     }
-    response = requests.get(
-        url=URL_string,
+    response_delaware = requests.get(
+        url=URL_string_delaware,
         headers=headers,
         stream=True,
     )
-    logger.info(response)
-    response_data = response.json()
-    logger.info(response_data)
-    response_items = response_data["items"]
+
+    response_municipal = requests.get(
+        url=URL_string_municipal,
+        headers=headers,
+        stream=True,
+    )
+    # logger.info(response)
+    response_data_delaware = response_delaware.json()
+    response_data_municipal = response_municipal.json()
+    # logger.info(response_data)
+    response_items_delaware = response_data_delaware["items"]
+    response_items_municipal = response_data_municipal["items"]
+
     mydoc = docx.Document()
     start_date_list = start_date.split("-")
     heading_date = (
@@ -96,8 +117,9 @@ def main():
     )
     heading = mydoc.add_heading("Court Video Proceedings " + heading_date + "\n")
     heading.alignment = WD_ALIGN_PARAGRAPH.CENTER
+
     mydoc_paragraph = mydoc.add_paragraph()
-    for video_info in response_items:
+    for video_info in response_items_delaware:
         playback_url = video_info["playbackUrl"]
         title = video_info["topic"]
         print(title)
@@ -107,6 +129,17 @@ def main():
         run.bold = True
         run_link = add_hyperlink(mydoc_paragraph, playback_url, "Video Link")
         mydoc_paragraph.add_run("\n\n")
+    for video_info in response_items_municipal:
+        playback_url = video_info["playbackUrl"]
+        title = video_info["topic"]
+        print(title)
+        print(playback_url)
+        run = mydoc_paragraph.add_run(title + "\n")
+        run.bold
+        run.bold = True
+        run_link = add_hyperlink(mydoc_paragraph, playback_url, "Video Link")
+        mydoc_paragraph.add_run("\n\n")
+
     document_name = "Courtroom_Proceedings_" + heading_date + ".docx"
     mydoc.save(VIDEO_PATH + month + " " + year + "\\" + document_name)
     docx2pdf.convert(VIDEO_PATH + month + " " + year + "\\" + document_name)
