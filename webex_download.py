@@ -59,6 +59,9 @@ def create_single_day_court_recordings(response_items_delaware, response_items_m
     heading = mydoc.add_heading("Court Video Proceedings " + heading_date + "\n")
     heading.alignment = WD_ALIGN_PARAGRAPH.CENTER
 
+    month_dict = {'12': "December", '11': "November"}
+    month = month_dict.get(month)
+
     mydoc_paragraph = mydoc.add_paragraph()
     for video_info in response_items_delaware:
         playback_url = video_info["playbackUrl"]
@@ -90,17 +93,23 @@ def create_single_day_court_recordings(response_items_delaware, response_items_m
 
 @logger.catch
 def main():
-    month = input("Enter month of video proceedings (i.e. 'September'):")
-    year = input(str("Enter year of video proceedings (i.e. '2021'):"))
-    start_date = input(
-        str("Enter the date (YYYY-MM-DD) of the first day of recordings to download:")
-    )
-    end_date = input(
-        str(
-            "Enter the date (YYYY-MM-DD) of the last day of recordings to download"
-            + " - download does not include the last day:"
-        )
-    )
+    month = input("Enter month of video proceedings in MM format (i.e. '09 for September'): ")
+    day_date = input(str("Enter the first day date of the video proceedings in DD format: "))
+    year = input(str("Enter year of video proceedings (i.e. '2021'): "))
+
+    # start_date = input(
+    #     str("Enter the date (YYYY-MM-DD) of the first day of recordings to download:")
+    # )
+    # # end_date = input(
+    #     str(
+    #         "Enter the date (YYYY-MM-DD) of the last day of recordings to download"
+    #         + " - download does not include the last day:"
+    #     )
+    # )
+
+    start_date = year + '-' + month + '-' + day_date
+    next_day_date = int(day_date) + 1
+    end_date = year + '-' + month + '-' + str(next_day_date)
     URL_string_delaware = (
         "https://webexapis.com/v1/recordings?max=100&from="
         + "{from_date}&to={to_date}&siteUrl={site_url}&hostEmail={email}".format(
