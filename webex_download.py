@@ -3,6 +3,7 @@ import docx
 import datetime
 import requests
 import json
+import os
 
 from flatten_json import flatten
 from loguru import logger
@@ -11,6 +12,8 @@ import docx2pdf
 from docx.oxml.shared import OxmlElement, qn
 from docx.enum.text import WD_ALIGN_PARAGRAPH
 
+VIDEO_PATH = "V:\\COURTROOM VIDEO PROCEEDINGS - JULY 2021 TO PRESENT\\"
+BEARER_TOKEN = "NDBkMGRmNTctNThlMS00N2JjLWFjNTAtODlmYzA2OWUxYzA3NWY1OTNlYzYtNGQ0_PF84_6b8180ed-7e73-4208-90f5-b67a07de84ac"
 
 def add_hyperlink(paragraph, url, text):
     """
@@ -47,69 +50,7 @@ def add_hyperlink(paragraph, url, text):
     paragraph._p.append(hyperlink)
     return hyperlink
 
-
-VIDEO_PATH = "V:\\COURTROOM VIDEO PROCEEDINGS - JULY 2021 TO PRESENT\\"
-BEARER_TOKEN = "NDBkMGRmNTctNThlMS00N2JjLWFjNTAtODlmYzA2OWUxYzA3NWY1OTNlYzYtNGQ0_PF84_6b8180ed-7e73-4208-90f5-b67a07de84ac"
-
-
-@logger.catch
-def main():
-    month = input("Enter month of video proceedings (i.e. 'September'):")
-    year = input(str("Enter year of video proceedings (i.e. '2021'):"))
-    start_date = input(
-        str("Enter the date (YYYY-MM-DD) of the first day of recordings to download:")
-    )
-    end_date = input(
-        str(
-            "Enter the date (YYYY-MM-DD) of the last day of recordings to download"
-            + " - download does not include the last day:"
-        )
-    )
-    URL_string_delaware = (
-        "https://webexapis.com/v1/recordings?max=100&from="
-        + "{from_date}&to={to_date}&siteUrl={site_url}&hostEmail={email}".format(
-            max_records="100",  # There is something up with max_records in the format
-            from_date=start_date,
-            to_date=end_date,
-            site_url="delawareohio.webex.com",
-            email="jkudela@municipalcourt.org",
-        )
-    )
-
-    URL_string_municipal = (
-        "https://webexapis.com/v1/recordings?max=100&from="
-        + "{from_date}&to={to_date}&siteUrl={site_url}&hostEmail={email}".format(
-            max_records="100",  # There is something up with max_records in the format
-            from_date=start_date,
-            to_date=end_date,
-            site_url="municipalcourt.webex.com",
-            email="jkudela@municipalcourt.org",
-        )
-    )
-    # logger.info(URL_string)
-
-    location = "Delaware City Webex"
-    headers = {
-        "Authorization": "Bearer {bearer_token}".format(bearer_token=BEARER_TOKEN)
-    }
-    response_delaware = requests.get(
-        url=URL_string_delaware,
-        headers=headers,
-        stream=True,
-    )
-
-    response_municipal = requests.get(
-        url=URL_string_municipal,
-        headers=headers,
-        stream=True,
-    )
-    # logger.info(response)
-    response_data_delaware = response_delaware.json()
-    response_data_municipal = response_municipal.json()
-    # logger.info(response_data)
-    response_items_delaware = response_data_delaware["items"]
-    response_items_municipal = response_data_municipal["items"]
-
+def create_single_day_court_recordings(response_items_delaware, response_items_municipal, start_date, month, year):
     mydoc = docx.Document()
     start_date_list = start_date.split("-")
     heading_date = (
@@ -117,6 +58,9 @@ def main():
     )
     heading = mydoc.add_heading("Court Video Proceedings " + heading_date + "\n")
     heading.alignment = WD_ALIGN_PARAGRAPH.CENTER
+
+    month_dict = {'12': "December", '11': "November"}
+    month = month_dict.get(month)
 
     mydoc_paragraph = mydoc.add_paragraph()
     for video_info in response_items_delaware:
@@ -143,6 +87,74 @@ def main():
     document_name = "Courtroom_Proceedings_" + heading_date + ".docx"
     mydoc.save(VIDEO_PATH + month + " " + year + "\\" + document_name)
     docx2pdf.convert(VIDEO_PATH + month + " " + year + "\\" + document_name)
+    os.remove(VIDEO_PATH + month + " " + year + "\\" + document_name)
+
+
+
+@logger.catch
+def main():
+    month = input("Enter month of video proceedings in MM format (i.e. '09 for September'): ")
+    day_date = input(str("Enter the first day date of the video proceedings in DD format: "))
+    year = input(str("Enter year of video proceedings (i.e. '2021'): "))
+
+    # start_date = input(
+    #     str("Enter the date (YYYY-MM-DD) of the first day of recordings to download:")
+    # )
+    # # end_date = input(
+    #     str(
+    #         "Enter the date (YYYY-MM-DD) of the last day of recordings to download"
+    #         + " - download does not include the last day:"
+    #     )
+    # )
+
+    start_date = year + '-' + month + '-' + day_date
+    next_day_date = int(day_date) + 1
+    end_date = year + '-' + month + '-' + str(next_day_date)
+    URL_string_delaware = (
+        "https://webexapis.com/v1/recordings?max=100&from="
+        + "{from_date}&to={to_date}&siteUrl={site_url}&hostEmail={email}".format(
+            max_records="100",  # There is something up with max_records in the format
+            from_date=start_date,
+            to_date=end_date,
+            site_url="delawareohio.webex.com",
+            email="jkudela@municipalcourt.org",
+        )
+    )
+
+    URL_string_municipal = (
+        "https://webexapis.com/v1/recordings?max=100&from="
+        + "{from_date}&to={to_date}&siteUrl={site_url}&hostEmail={email}".format(
+            max_records="100",  # There is something up with max_records in the format
+            from_date=start_date,
+            to_date=end_date,
+            site_url="municipalcourt.webex.com",
+            email="jkudela@municipalcourt.org",
+        )
+    )
+
+    location = "Delaware City Webex"
+    headers = {
+        "Authorization": "Bearer {bearer_token}".format(bearer_token=BEARER_TOKEN)
+    }
+    response_delaware = requests.get(
+        url=URL_string_delaware,
+        headers=headers,
+        stream=True,
+    )
+
+    response_municipal = requests.get(
+        url=URL_string_municipal,
+        headers=headers,
+        stream=True,
+    )
+
+    response_data_delaware = response_delaware.json()
+    response_data_municipal = response_municipal.json()
+
+    response_items_delaware = response_data_delaware["items"]
+    response_items_municipal = response_data_municipal["items"]
+
+    create_single_day_court_recordings(response_items_delaware, response_items_municipal, start_date, month, year)
 
 
 main()
