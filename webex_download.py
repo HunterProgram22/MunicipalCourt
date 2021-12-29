@@ -110,6 +110,7 @@ def main():
     response_items_delaware = response_data_delaware["items"]
     response_items_municipal = response_data_municipal["items"]
 
+def create_single_day_court_recordings():
     mydoc = docx.Document()
     start_date_list = start_date.split("-")
     heading_date = (
