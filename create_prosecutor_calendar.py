@@ -62,7 +62,7 @@ def delete_paragraph(paragraph):
     p._p = p._element = None
 
 
-def create_daily_calendar(courtroom):
+def create_daily_calendar(courtroom, days=7):
     """This version for the prosecutors office is for 7 days from today."""
     events = getCalendarEntries(courtroom)
     mydoc = docx.Document()
@@ -71,7 +71,7 @@ def create_daily_calendar(courtroom):
         "courtroomb": "Courtoom B",
         "courtroomc": "Courtroom C",
     }
-    today = datetime.datetime.today() + datetime.timedelta(7)
+    today = datetime.datetime.today() + datetime.timedelta(days)
     begin = today.date().strftime("%m-%d-%Y")
     if len(events) == 0:
         heading = mydoc.add_heading(court_names[courtroom] + " " + str(begin))
