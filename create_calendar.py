@@ -62,7 +62,7 @@ def create_daily_calendar(courtroom):
     mydoc = docx.Document()
     court_names = {
         "courtrooma": "Courtroom A",
-        "courtroomb": "Courtoom B",
+        "courtroomb": "Courtroom B",
         "courtroomc": "Courtroom C",
     }
     if len(events) == 0:

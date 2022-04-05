@@ -13,7 +13,7 @@ from docx.oxml.shared import OxmlElement, qn
 from docx.enum.text import WD_ALIGN_PARAGRAPH
 
 VIDEO_PATH = "V:\\COURTROOM VIDEO PROCEEDINGS - JULY 2021 TO PRESENT\\"
-BEARER_TOKEN = "NDBkMGRmNTctNThlMS00N2JjLWFjNTAtODlmYzA2OWUxYzA3NWY1OTNlYzYtNGQ0_PF84_6b8180ed-7e73-4208-90f5-b67a07de84ac"
+BEARER_TOKEN = "OThhMjk2NjUtMjMzYy00NWM3LTkyYzMtN2M0MTYzOTQ4NzEyYjgwOTdlMWItMjk5_PF84_6b8180ed-7e73-4208-90f5-b67a07de84ac"
 
 def add_hyperlink(paragraph, url, text):
     """
@@ -59,7 +59,7 @@ def create_single_day_court_recordings(response_items_delaware, response_items_m
     heading = mydoc.add_heading("Court Video Proceedings " + heading_date + "\n")
     heading.alignment = WD_ALIGN_PARAGRAPH.CENTER
 
-    month_dict = {'12': "December", '11': "November"}
+    month_dict = {'12': "December", '11': "November", '01': "January", '02': "February", '03': "March", '04': "April", '05': "May", '06':"June", '07':"July", '08': "August", '09': "September", '10': "October"}
     month = month_dict.get(month)
 
     mydoc_paragraph = mydoc.add_paragraph()

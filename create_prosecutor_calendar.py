@@ -39,12 +39,11 @@ def getCalendarEntries(room, days=7):
     recipient = ns.CreateRecipient(room)  # cmd whoami to find this
     resolved = recipient.Resolve()  # checks for username in address book
     appointments = ns.GetSharedDefaultFolder(recipient, 9).Items
-    print(appointments)
     appointments.Sort("[Start]")
     appointments.IncludeRecurrences = "True"
     today = datetime.datetime.today() + datetime.timedelta(days)
     begin = today.date().strftime("%m/%d/%Y")
-    tomorrow = datetime.timedelta(1) + today
+    tomorrow = datetime.timedelta(days=days) + today
     end = tomorrow.date().strftime("%m/%d/%Y")
     appointments = appointments.Restrict(
         "[Start] >= '" + begin + "' AND [END] <= '" + end + "'"
@@ -68,7 +67,7 @@ def create_daily_calendar(courtroom, days=7):
     mydoc = docx.Document()
     court_names = {
         "courtrooma": "Courtroom A",
-        "courtroomb": "Courtoom B",
+        "courtroomb": "Courtroom B",
         "courtroomc": "Courtroom C",
     }
     today = datetime.datetime.today() + datetime.timedelta(days)
