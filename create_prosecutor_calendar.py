@@ -66,9 +66,9 @@ def create_daily_calendar(courtroom, days=7):
     events = getCalendarEntries(courtroom)
     mydoc = docx.Document()
     court_names = {
-        "courtrooma": "Courtroom A",
-        "courtroomb": "Courtroom B",
-        "courtroomc": "Courtroom C",
+        "courtrooma@municipalcourt.org": "Courtroom A",
+        "courtroomb@municipalcourt.org": "Courtroom B",
+        "courtroomc@municipalcourt.org": "Courtroom C",
     }
     today = datetime.datetime.today() + datetime.timedelta(days)
     begin = today.date().strftime("%m-%d-%Y")
@@ -87,15 +87,17 @@ def create_daily_calendar(courtroom, days=7):
             time.bold = True
             paragraph.add_run(event.subject + " " + event.body + "\n")
 
+
+
     mydoc.save(
         "S:\\Prosecutor\\Courtroom_Calendars\\"
-        + courtroom
+        + court_names[courtroom]
         + "_prosecutor_"
         + begin
         + ".docx"
     )
 
 
-create_daily_calendar("courtrooma")
-create_daily_calendar("courtroomb")
-create_daily_calendar("courtroomc")
+create_daily_calendar("courtrooma@municipalcourt.org")
+create_daily_calendar("courtroomb@municipalcourt.org")
+create_daily_calendar("courtroomc@municipalcourt.org")

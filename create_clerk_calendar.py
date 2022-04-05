@@ -64,9 +64,9 @@ def create_daily_calendar(courtroom):
     events = getCalendarEntries(courtroom)
     mydoc = docx.Document()
     court_names = {
-        "courtrooma": "Courtroom A",
-        "courtroomb": "Courtroom B",
-        "courtroomc": "Courtroom C",
+        "courtrooma@municipalcourt.org": "Courtroom A",
+        "courtroomb@municipalcourt.org": "Courtroom B",
+        "courtroomc@municipalcourt.org": "Courtroom C",
     }
     if len(events) == 0:
         heading = mydoc.add_heading(
@@ -88,9 +88,9 @@ def create_daily_calendar(courtroom):
             paragraph.add_run(event.subject + " " + event.body + "\n")
     today = datetime.datetime.today() + datetime.timedelta(1)
     begin = today.date().strftime("%m-%d-%Y")
-    mydoc.save(f"J:\\DailyDockets\\{courtroom}_clerk_{begin}.docx")
+    mydoc.save(f"J:\\DailyDockets\\{court_names[courtroom]}_clerk_{begin}.docx")
 
 
-create_daily_calendar("courtrooma")
-create_daily_calendar("courtroomb")
-create_daily_calendar("courtroomc")
+create_daily_calendar("courtrooma@municipalcourt.org")
+create_daily_calendar("courtroomb@municipalcourt.org")
+create_daily_calendar("courtroomc@municipalcourt.org")
