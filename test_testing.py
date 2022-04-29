@@ -30,6 +30,8 @@ def get_message_body(user_name, user_message):
 test_message_list = [
     ("Justin Kudela", "You are so cool!", "+16167064582"),
     ("Test Justin", "Buckle up!", "+16167064582"),
+    ("Amanda Bunner", "We can't wait for ComFest!", "+19377256258"),
+    ("Judge Hemmeter", "Hi Judge it is Greg Saylor you should bet on me! ;)", "+16147460883"),
 ]
 
 for item in test_message_list:
