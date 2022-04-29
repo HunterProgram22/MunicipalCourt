@@ -26,7 +26,7 @@ class calendarEvent(object):
         self.body = new_body
 
 
-def getCalendarEntries(room, days=7):
+def getCalendarEntries(room, days=1):
     """
     Returns calender entries for days for this version default is 7 because
     the prosecutor needs a week in advance. Labels today and tomorrow aren't accurate
@@ -45,7 +45,8 @@ def getCalendarEntries(room, days=7):
     begin = today.date().strftime("%m/%d/%Y")
     tomorrow = datetime.timedelta(1) + today
     end = tomorrow.date().strftime("%m/%d/%Y")
-    appointments = appointments.Restrict(
+    appointments = \
+        appointments.Restrict(
         "[Start] >= '" + begin + "' AND [END] <= '" + end + "'"
     )
     events = []
@@ -61,7 +62,7 @@ def delete_paragraph(paragraph):
     p._p = p._element = None
 
 
-def create_daily_calendar(courtroom, days=7):
+def create_daily_calendar(courtroom, days=1):
     """This version for the prosecutors office is for 7 days from today."""
     events = getCalendarEntries(courtroom)
     mydoc = docx.Document()
@@ -90,9 +91,9 @@ def create_daily_calendar(courtroom, days=7):
 
 
     mydoc.save(
-        "S:\\Prosecutor\\Courtroom_Calendars\\"
+        "J:\\Courtroom_Calendars\\"
         + court_names[courtroom]
-        + "_prosecutor_"
+        + "_bailiffs_"
         + begin
         + ".docx"
     )
