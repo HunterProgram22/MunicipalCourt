@@ -6,7 +6,7 @@ from twilio.rest import Client
 # Find your Account SID and Auth Token at twilio.com/console
 # and set the environment variables. See http://twil.io/secure
 account_sid = 'ACff2e4a0b9d6b051eed464409e27a4e0d'
-auth_token = 'b9a079311567fc8044f014faf2c8bd9c'
+auth_token = 'f611e02bef2886787a3eb95c5009a1d9'
 client = Client(account_sid, auth_token)
 
 # message = client.messages \
@@ -37,7 +37,6 @@ for item in test_message_list:
     user_name, user_message, user_number = item
     print(user_name)
     print(user_message)
-    print(user_number)
     message = create_message(user_name, user_message, user_number)
     print(message.sid)
     print(message.status)
