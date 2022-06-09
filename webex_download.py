@@ -13,7 +13,7 @@ from docx.oxml.shared import OxmlElement, qn
 from docx.enum.text import WD_ALIGN_PARAGRAPH
 
 VIDEO_PATH = "V:\\COURTROOM VIDEO PROCEEDINGS - JULY 2021 TO PRESENT\\"
-BEARER_TOKEN = "OWNlNTNhZDEtNGI2MS00MjdhLWFjZGYtZjc0MDNmMjljYTJmYzcwZDQyOTQtNmI1_PF84_6b8180ed-7e73-4208-90f5-b67a07de84ac"
+BEARER_TOKEN = "ZWNkMDdjZjItMDkwMS00YjE0LTljNGEtODM1NmYyNmZiMTcxZDQ4ZjQxZDEtNDg2_PF84_6b8180ed-7e73-4208-90f5-b67a07de84ac"
 
 def add_hyperlink(paragraph, url, text):
     """
@@ -110,6 +110,7 @@ def main():
     start_date = year + '-' + month + '-' + day_date
     next_day_date = int(day_date) + 1
     end_date = year + '-' + month + '-' + str(next_day_date)
+    # end_date = '2022-06-01' # Need to use manual last date if last day of month is a 31st TODO - Fix  ,s
     URL_string_delaware = (
         "https://webexapis.com/v1/recordings?max=100&from="
         + "{from_date}&to={to_date}&siteUrl={site_url}&hostEmail={email}".format(
