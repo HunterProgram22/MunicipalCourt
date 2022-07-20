@@ -13,7 +13,7 @@ from docx.oxml.shared import OxmlElement, qn
 from docx.enum.text import WD_ALIGN_PARAGRAPH
 
 VIDEO_PATH = "V:\\COURTROOM VIDEO PROCEEDINGS - JULY 2021 TO PRESENT\\"
-BEARER_TOKEN = "ZWNkMDdjZjItMDkwMS00YjE0LTljNGEtODM1NmYyNmZiMTcxZDQ4ZjQxZDEtNDg2_PF84_6b8180ed-7e73-4208-90f5-b67a07de84ac"
+BEARER_TOKEN = "YzdkNjYyMzktZTBjMi00NWNjLThjMDgtNDFkNmQwZTFlNjVkYjI5MDEwNDgtODdk_PF84_6b8180ed-7e73-4208-90f5-b67a07de84ac"
 
 def add_hyperlink(paragraph, url, text):
     """
