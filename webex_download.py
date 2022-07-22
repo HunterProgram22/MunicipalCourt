@@ -13,7 +13,7 @@ from docx.oxml.shared import OxmlElement, qn
 from docx.enum.text import WD_ALIGN_PARAGRAPH
 
 VIDEO_PATH = "V:\\COURTROOM VIDEO PROCEEDINGS - JULY 2021 TO PRESENT\\"
-BEARER_TOKEN = "YzdkNjYyMzktZTBjMi00NWNjLThjMDgtNDFkNmQwZTFlNjVkYjI5MDEwNDgtODdk_PF84_6b8180ed-7e73-4208-90f5-b67a07de84ac"
+BEARER_TOKEN = "NTlhN2UxZmYtOTZlYS00YWI2LTk1NmYtZGRkYWU5NjIxYTcwNjc0MTdkMzUtZDg2_PF84_6b8180ed-7e73-4208-90f5-b67a07de84ac"
 
 def add_hyperlink(paragraph, url, text):
     """
@@ -96,16 +96,6 @@ def main():
     month = input("Enter month of video proceedings in MM format (i.e. '09 for September'): ")
     day_date = input(str("Enter the first day date of the video proceedings in DD format: "))
     year = input(str("Enter year of video proceedings (i.e. '2021'): "))
-
-    # start_date = input(
-    #     str("Enter the date (YYYY-MM-DD) of the first day of recordings to download:")
-    # )
-    # # end_date = input(
-    #     str(
-    #         "Enter the date (YYYY-MM-DD) of the last day of recordings to download"
-    #         + " - download does not include the last day:"
-    #     )
-    # )
 
     start_date = year + '-' + month + '-' + day_date
     next_day_date = int(day_date) + 1
